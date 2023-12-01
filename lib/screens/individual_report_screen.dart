@@ -86,6 +86,7 @@ class individual_report_screen extends StatelessWidget {
                                 rollno, name, ispresent, class_id, date);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
+                            backgroundColor: Colors.lightBlue,
                             content: Text('Record Modified successfully!!!'),
                             duration: Duration(seconds: 1),
                           ),
@@ -115,6 +116,7 @@ class individual_report_screen extends StatelessWidget {
                             class_id, date, context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
+                            backgroundColor: Colors.lightBlue,
                             content: Text('Record Deleted successfully!!!'),
                             duration: Duration(seconds: 1),
                           ),
