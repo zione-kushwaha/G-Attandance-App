@@ -60,6 +60,44 @@ class MyApp extends StatelessWidget {
               const individual_report_screen(),
           AboutScreen.RouteName: (context) => const AboutScreen(),
         },
+        onGenerateRoute: (settings) {
+          return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+              switch (settings.name) {
+                case class_name_code.NamedRoute:
+                  return const class_name_code();
+                case add_record.RouteName:
+                  return add_record();
+                case StartAttendanceScreen.RouteName:
+                  return const StartAttendanceScreen();
+                case class_report_screen.RouteName:
+                  return const class_report_screen();
+                case student_report.NamedRoute:
+                  return const student_report();
+                case individual_report_screen.RouteName:
+                  return const individual_report_screen();
+                case AboutScreen.RouteName:
+                  return const AboutScreen();
+                default:
+                  return const First();
+              }
+            },
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              const begin = Offset(-1.0, 0.0);
+              const end = Offset.zero;
+              const curve = Curves.bounceInOut;
+              var tween = Tween(begin: begin, end: end).chain(
+                CurveTween(curve: curve),
+              );
+              var offset = animation.drive(tween); // Corrected line
+              return SlideTransition(
+                position: offset,
+                child: child,
+              );
+            },
+          );
+        },
       ),
     );
   }

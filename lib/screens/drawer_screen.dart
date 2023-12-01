@@ -247,10 +247,10 @@ class drawer_screen extends StatelessWidget {
             },
             child: const drawer_item(
               iconss: Icon(
-                Icons.swap_vert,
+                Icons.file_download,
                 color: Color.fromARGB(255, 66, 202, 191),
               ),
-              text: 'Import/Export  DB',
+              text: 'Export  Database',
             ),
           ),
           const SizedBox(
