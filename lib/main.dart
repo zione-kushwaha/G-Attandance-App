@@ -90,7 +90,7 @@ class MyApp extends StatelessWidget {
               var tween = Tween(begin: begin, end: end).chain(
                 CurveTween(curve: curve),
               );
-              var offset = animation.drive(tween); // Corrected line
+              var offset = animation.drive(tween);
               return SlideTransition(
                 position: offset,
                 child: child,
