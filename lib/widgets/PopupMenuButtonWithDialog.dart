@@ -31,6 +31,7 @@ class PopupMenuButtonWithDialog extends StatelessWidget {
             provider_data.deleteStudentRecord(class_id, student.rollno);
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
+                backgroundColor: Colors.lightBlue,
                 content: Text('Record deleted successfully!!!'),
                 duration: Duration(seconds: 1),
               ),
@@ -80,11 +81,12 @@ class PopupMenuButtonWithDialog extends StatelessWidget {
           actions: [
             ElevatedButton(
               onPressed: () async {
-                await providers.renameStudent(
+                await providers.RenameStudent(
                     class_id, int.parse(rollno), new_name.text);
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
+                    backgroundColor: Colors.lightBlue,
                     content: Text('Rename successful!'),
                     duration: Duration(seconds: 1),
                   ),

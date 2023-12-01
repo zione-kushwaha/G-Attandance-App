@@ -42,6 +42,7 @@ class ClassModelProvider with ChangeNotifier {
     var result = db!.insert('class_table', classs.toMap());
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
+        backgroundColor: Colors.lightBlue,
         content: Text('Class Added successfully!!!'),
         duration: Duration(seconds: 1),
       ),
@@ -73,6 +74,7 @@ class ClassModelProvider with ChangeNotifier {
     );
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
+        backgroundColor: Colors.lightBlue,
         content: Text('Class Modified successfully!!!'),
         duration: Duration(seconds: 1),
       ),
@@ -81,16 +83,16 @@ class ClassModelProvider with ChangeNotifier {
     return updateResult;
   }
 
-  Future<bool> isClassIdConflict(String classId) async {
-    final db = await databasehelper.database; // Await the Future<Database>
-    final List<Map<String, dynamic>>? result = await db?.query(
-      'class_table',
-      where: 'class_id = ?',
-      whereArgs: [classId],
-    );
+  // Future<bool> isClassIdConflict(String classId) async {
+  //   final db = await databasehelper.database; // Await the Future<Database>
+  //   final List<Map<String, dynamic>>? result = await db?.query(
+  //     'class_table',
+  //     where: 'class_id = ?',
+  //     whereArgs: [classId],
+  //   );
 
-    return result != null && result.isNotEmpty;
-  }
+  //   return result != null && result.isNotEmpty;
+  // }
 
   // Function to get class name by class ID
   Future<String?> getClassNameById(int id) async {

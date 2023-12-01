@@ -83,6 +83,7 @@ class studentMOdelProvider with ChangeNotifier {
     notifyListeners();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
+        backgroundColor: Colors.lightBlue,
         content: Text('Student Added Successfully!!!'),
         duration: Duration(seconds: 1),
       ),
@@ -92,7 +93,7 @@ class studentMOdelProvider with ChangeNotifier {
   }
 
 //function to delete classModel record from the table
-  Future<int?> deleteClassModel(int Id) async {
+  Future<int?> DeleteClassModel(int Id) async {
     final db = await dbProvider.database;
     var result = await db?.delete(
       'student_table',
@@ -101,23 +102,6 @@ class studentMOdelProvider with ChangeNotifier {
     );
     notifyListeners();
     return result;
-  }
-
-  //function to update record from the database
-  Future<int?> updateClassModel(
-      student_model oldClass, student_model newClass) async {
-    final db = await dbProvider.database; // Await the Future<Database>
-    final int? updateResult = await db?.update(
-      'student_table',
-      {
-        'name': newClass.name,
-        'rollno': newClass.rollno,
-      },
-      where: 'uniquekey= ?',
-      whereArgs: [oldClass.uniquekey],
-    );
-    notifyListeners();
-    return updateResult;
   }
 
   Future<void> insertStudentsInBulk(
@@ -152,7 +136,7 @@ class studentMOdelProvider with ChangeNotifier {
   }
 
   // Function to rename a student record for a specific class (uniquekey) and rollno
-  Future<int?> renameStudent(int uniquekey, int rollno, String newName) async {
+  Future<int?> RenameStudent(int uniquekey, int rollno, String newName) async {
     final db = await dbProvider.database;
     final int? result = await db?.update(
       'student_table',

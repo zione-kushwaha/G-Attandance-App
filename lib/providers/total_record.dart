@@ -248,7 +248,7 @@ class totalRecordProvider with ChangeNotifier {
           whereArgs: [uniquekey, rollnoList[i], date],
         );
       } catch (e) {
-        print(e);
+        //error
       }
     }
     notifyListeners();

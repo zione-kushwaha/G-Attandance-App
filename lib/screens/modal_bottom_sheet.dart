@@ -94,40 +94,15 @@ class ModelBottomSheet extends StatelessWidget {
                       },
                     );
                   } else {
-                    if (await ProviderData.isClassIdConflict(classId)) {
-                      // ignore: use_build_context_synchronously
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text(
-                                'Alert !!!',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                              content: const Text(
-                                  'This class ID is already present. Choose another one...'),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          });
-                    } else {
-                      // ignore: use_build_context_synchronously
-                      await ProviderData.insertClassModel(
-                          ClassModel(
-                            class_id: classId,
-                            class_name: className,
-                          ),
-                          context);
+                    await ProviderData.insertClassModel(
+                        ClassModel(
+                          class_id: classId,
+                          class_name: className,
+                        ),
+                        context);
 
-                      // ignore: use_build_context_synchronously
-                      Navigator.pop(context);
-                    }
+                    // ignore: use_build_context_synchronously
+                    Navigator.pop(context);
                   }
                 },
                 child: const Text('Submit'),

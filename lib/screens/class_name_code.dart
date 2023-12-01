@@ -31,7 +31,7 @@ class _class_name_codeState extends State<class_name_code> {
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(3000),
     );
     if (picked != null && picked != selectedDate) {
       setState(() {

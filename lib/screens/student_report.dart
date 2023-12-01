@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:pdf/pdf.dart';
 import '/providers/studentModel.dart';
 import '/providers/total_record.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +22,9 @@ class student_report extends StatelessWidget {
       final students =
           await Provider.of<studentMOdelProvider>(context, listen: false)
               .getStudentsByClassId(classId);
+      final days =
+          await Provider.of<totalRecordProvider>(context, listen: false)
+              .getTotalAttendanceDays(classId);
 
       // Create a PDF document
       final pdf = pw.Document();
@@ -30,10 +34,21 @@ class student_report extends StatelessWidget {
       int i = 1;
 
       // Add headers to the table
-      studentData.add(['S.N.', 'Roll No.', 'Name', 'Present Days']);
+      studentData
+          .add(['S.N.', 'Roll No.', 'Name', 'Present/Total', 'Percentage']);
 
       // Add rows for each student
       for (final student in students) {
+        if (i % 25 == 1 && i > 25) {
+          final List<String> headerRow = [
+            'S.N.',
+            'Roll No.',
+            'Name',
+            'Present/Total',
+            'Percentage'
+          ];
+          studentData.add(headerRow);
+        }
         final presentDays =
             await Provider.of<totalRecordProvider>(context, listen: false)
                 .countDaysPresent(classId, student.rollno);
@@ -42,12 +57,13 @@ class student_report extends StatelessWidget {
           '${i++}',
           student.rollno.toString(),
           student.name ?? '',
-          presentDays.toString(),
+          '$presentDays/$days',
+          '${((presentDays / days) * 100).toStringAsFixed(2)}%'
         ]);
       }
 
       // Add pages with tables, considering page breaks
-      const int maxRowsPerPage = 30;
+      const int maxRowsPerPage = 26;
       for (int i = 0; i < studentData.length; i += maxRowsPerPage) {
         final int endIndex = (i + maxRowsPerPage) < studentData.length
             ? (i + maxRowsPerPage)
@@ -58,9 +74,28 @@ class student_report extends StatelessWidget {
 
         pdf.addPage(
           pw.Page(
-            build: (pw.Context context) => pw.Table.fromTextArray(
-              data: currentPageData,
-            ),
+            pageFormat: PdfPageFormat.a4,
+            build: (pw.Context context) {
+              final pageNumber = context.pageNumber;
+              return pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Table.fromTextArray(
+                    data: currentPageData,
+                  ),
+                  // Add page number to the end of each page
+                  pw.Container(
+                    alignment: pw.Alignment.centerRight,
+                    margin: const pw.EdgeInsets.only(top: 10.0),
+                    child: pw.Text(
+                      'Page $pageNumber',
+                      style: const pw.TextStyle(
+                          fontSize: 10, color: PdfColors.red),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         );
       }

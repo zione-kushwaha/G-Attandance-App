@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types, deprecated_member_use
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:pdf/pdf.dart';
 import '/providers/total_record.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -77,6 +78,7 @@ class drawer_screen extends StatelessWidget {
           await Provider.of<totalRecordProvider>(context, listen: false)
               .getAllRecords();
       int i = 1;
+
       // Create a PDF document
       final pdf = pw.Document();
 
@@ -89,6 +91,17 @@ class drawer_screen extends StatelessWidget {
 
       // Add rows for each record
       for (final record in records) {
+        if (i % 25 == 1 && i > 25) {
+          final List<String> headerRow = [
+            'SN.',
+            'Name',
+            'Roll No',
+            'Is Present',
+            'Date',
+            'Class Name'
+          ];
+          tableData.add(headerRow);
+        }
         tableData.add([
           ('${i++}').toString(),
           record.name ?? '',
@@ -96,11 +109,12 @@ class drawer_screen extends StatelessWidget {
           record.ispresent.toString(),
           record.date,
           record.classname,
-          '' // Assuming 'className' is the column storing class name
+          ''
         ]);
       }
       // Add pages with tables, considering page breaks
-      const int maxRowsPerPage = 30; // Adjust as needed
+      const int maxRowsPerPage = 26;
+
       for (int i = 0; i < tableData.length; i += maxRowsPerPage) {
         final int endIndex = (i + maxRowsPerPage) < tableData.length
             ? (i + maxRowsPerPage)
@@ -111,9 +125,28 @@ class drawer_screen extends StatelessWidget {
 
         pdf.addPage(
           pw.Page(
-            build: (pw.Context context) => pw.Table.fromTextArray(
-              data: currentPageData,
-            ),
+            pageFormat: PdfPageFormat.a4,
+            build: (pw.Context context) {
+              final pageNumber = context.pageNumber;
+              return pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Table.fromTextArray(
+                    data: currentPageData,
+                  ),
+                  // Add page number to the end of each page
+                  pw.Container(
+                    alignment: pw.Alignment.centerRight,
+                    margin: const pw.EdgeInsets.only(top: 10.0),
+                    child: pw.Text(
+                      'Page $pageNumber',
+                      style: const pw.TextStyle(
+                          fontSize: 10, color: PdfColors.red),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         );
       }
@@ -128,7 +161,7 @@ class drawer_screen extends StatelessWidget {
           text: 'Sharing exported $tableName records',
           subject: 'Exported Records');
     } catch (e) {
-      //b
+      // Handle exceptions
     }
   }
 

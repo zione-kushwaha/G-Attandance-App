@@ -30,7 +30,7 @@ class popup_menu_bottom extends StatelessWidget {
             btnCancelOnPress: () {},
             btnOkOnPress: () {
               _deleteClass(context, providerData, xyz);
-              studentProvider.deleteClassModel(xyz.id!);
+              studentProvider.DeleteClassModel(xyz.id!);
               totalprovider.deleteRecordsByUniqueKey(xyz.id!);
             },
           ).show();
@@ -79,39 +79,15 @@ class popup_menu_bottom extends StatelessWidget {
           actions: [
             ElevatedButton(
               onPressed: () async {
-                if (await provider.isClassIdConflict(classIdController.text)) {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text(
-                            'Alert !!!',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                          content: const Text(
-                              'This class ID is already present. Choose another one...'),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('OK'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      });
-                } else {
-                  // Update the class name and class ID
-
-                  provider.updateClassModel(
-                      xyz,
-                      ClassModel(
-                        class_id: classIdController.text,
-                        class_name: classNameController.text,
-                      ),
-                      context);
-                  Navigator.pop(context);
-                }
+                // Update the class name and class ID
+                provider.updateClassModel(
+                    xyz,
+                    ClassModel(
+                      class_id: classIdController.text,
+                      class_name: classNameController.text,
+                    ),
+                    context);
+                Navigator.pop(context);
               },
               child: const Text('Save'),
             ),
@@ -133,6 +109,7 @@ class popup_menu_bottom extends StatelessWidget {
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
+        backgroundColor: Colors.lightBlue,
         content: Text('Class deleted successfully!!!'),
         duration: Duration(seconds: 1),
       ),
